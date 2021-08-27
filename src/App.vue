@@ -1,6 +1,30 @@
 <template>
   <div id="app">
-    hi
+    <v-app>
+      <v-app-bar app>怪人</v-app-bar>
+      <v-main>
+        <v-card
+          class="mx-auto"
+          max-width="300"
+          tile
+        >
+          <v-list dense>
+              <v-list-item
+                v-for="(item, i) in items"
+                :key="i"
+              >
+                <v-list-item-icon>
+                  <v-icon v-text="`mdi-account`"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  {{ item[0]? item[0] : '等你報名' }}
+                  <!-- <v-list-item-title v-text="item[0]"></v-list-item-title> -->
+                </v-list-item-content>
+              </v-list-item>
+          </v-list>
+        </v-card>
+      </v-main>
+    </v-app>
   </div>
 </template>
 
@@ -15,6 +39,7 @@ export default {
       .then((response) => {
         // handle success
         console.log(response.data)
+        this.items = response.data
       })
       .catch(function (error) {
         // handle error
@@ -23,7 +48,10 @@ export default {
       .then(function () {
         // always executed
       })
-  }
+  },
+  data: () => ({
+    items: []
+  })
 }
 </script>
 
