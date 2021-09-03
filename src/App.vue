@@ -1,12 +1,28 @@
 <template>
   <div id="app">
     <v-app>
-      <v-app-bar app>9/7 公園下的前端工程師</v-app-bar>
-      <v-main>
+      <v-app-bar  dark app elevation="0">
+
+      <template v-slot:img="{ props }">
+        <v-img
+          v-bind="props"
+          gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
+        ></v-img>
+      </template>
+      9/7 公園下的前端工程師</v-app-bar>
+      <v-main class="px-3">
+        <div class="d-flex justify-center mt-8" v-if="isLoading">
+          <v-progress-circular
+            indeterminate
+            :size="100"
+            color="primary"
+          ></v-progress-circular>
+
+        </div>
         <v-card
           class="mx-auto"
-          max-width="300"
-          tile
+          max-width="500"
+          tile v-else
         >
           <v-list dense>
               <v-list-item
@@ -29,7 +45,7 @@
               </v-list-item>
           </v-list>
         </v-card>
-        <div style="text-align: center;">
+        <div class="mt-8 purple--text darken-1 d-flex justify-center">
           活動詳情：<br/>
           <a href="https://fb.me/e/2L9wRl9A3">https://fb.me/e/2L9wRl9A3</a>
         </div>
@@ -45,25 +61,25 @@ export default {
   components: {
   },
   created () {
-    // https://script.googleusercontent.com/macros/echo?user_content_key=RQa3UV_bp_A7Ot7b2DI8pf30A6arE2OOTUcokNr27xbC3A-qT0h7SkFfNskX3AbNvZZdqKLHCGlBHlGwxlCpatVoL8S1QuYxm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnCJAaF2O3DjeG585D8Kdya5ggRYxt5IwwZRB3qdeyKo-1Wiw_r0D52gFfrcngihQDv55RuLsdhyDMU741UnYodE3UJ8JiiR8kA&lib=MlIA8paqZQMOFrrZqMEnbFiq1-vRkhSuq
-
-    axios.get('https://script.google.com/macros/s/AKfycbzFZpSdRLEq6-Rt2e64NSFzxZchdoxvg93ii7dr_8u2ij0ZU3xSfMxnzU38K3sXUFfy3w/exec')
-      .then((response) => {
-        // handle success
-        console.log(response.data)
-        this.items = response.data
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error)
-      })
-      .then(function () {
-        // always executed
-      })
+    this.load()
   },
   data: () => ({
-    items: []
-  })
+    items: [],
+    isLoading: false
+  }),
+  methods: {
+    async load () {
+      try {
+        this.isLoading = true
+        const res = await axios.get('https://script.google.com/macros/s/AKfycbzFZpSdRLEq6-Rt2e64NSFzxZchdoxvg93ii7dr_8u2ij0ZU3xSfMxnzU38K3sXUFfy3w/exec')
+        this.items = res.data
+      } catch (err) {
+        console.log('err', err)
+      } finally {
+        this.isLoading = false
+      }
+    }
+  }
 }
 </script>
 
